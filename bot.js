@@ -1,9 +1,16 @@
+/* Made by Maxim D. & Alexie C.
+* Todolist:
+* 1. Bot in call and barks *woof*, disconnects.
+* 2.
+*/
+
+
 //nodig voor werking
 var Discord = require('discord.io');
-var Discord = require('discord.js');
+//var Discord = require('discord.js');
 var logger = require('winston');
 var auth = require('./auth.json');
-
+var fs = require('fs');
 
 
 //logs in console server
@@ -24,7 +31,7 @@ bot.on('ready', function (evt) {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
-	  bot.setPresence( {game: {name:"Korfbal"}} );
+	  bot.setPresence( {game: {name:"dogehelp"}} );
 });
 
 
@@ -33,11 +40,13 @@ bot.on('ready', function (evt) {
 var mutedusers = ["000000"];
 
 //Doge videos uit tekstbestand halen
-var fs = require("fs");
-var links = fs.readFileSync("./data-files/doge_videos.txt", "utf-8");
+var links = fs.readFileSync("./data-files/doge_videos.txt", "utf-8").split("\n");
+
+//Doge bark effect
+//var bark = fs.createReadStream('./muziek/bark.mp3');
 
 //simulate: "Alexie Chaerle is typing....."
-bot.simulateTyping("400647401473310731");
+//bot.simulateTyping("400647401473310731");
 
 
 
@@ -70,10 +79,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 		//controleren op bot-channel commands;
 		if (channelID == 400650437688033290) {
     switch(cmd[0]) {
-			case 'print':
+			case 'dogehelp':
 					bot.sendMessage({
                     to: channelID,
-                    message: '> **Commandos werken enkel in #botchannel **\n> **plsdoge** - geeft een foto van doge weer\n> **mute gebruiker** - mute een gebruiker\n> **unmute gebruiker** - unmute een gebruiker',
+                    message: '> **Commandos werken enkel in #botchannel **\n> *dogeimg* - geeft een foto van doge weer\n> *dogevid* - geeft een video van doge weer\n> *dogeinfo* - geeft info over de bot weer\n> *dogebark* - laat de hond blaffen\n> *mute gebruikerID* - mute een gebruiker\n> *unmute gebruikerID* - unmute een gebruiker',
                 });
             break;
 
@@ -107,20 +116,64 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 			}
             break;
 
-
-      case 'plsdoge':
-
+      // Laat random doge foto zien
+      case 'dogeimg':
       bot.uploadFile({
         to: channelID,
         file: "./images/doge" + (Math.floor(Math.random() * 5)) + ".png",
       });
           break;
 
+      // Laat random doge video zien
       case 'dogevid':
       bot.sendMessage({
         to: channelID,
-        message: ""
-      })
-    }
-     }
-});
+        message: links[(Math.floor(Math.random() * links.length))],
+      });
+          break;
+
+      // Doge info
+      case 'dogeinfo':
+      bot.sendMessage({
+        to: channelID,
+        message: "> **Dogebot 1.0**\n> *created by Maxim Derboven & Alexie Chaerle*",
+      });
+          break;
+
+      // Bot komt in call en blaft
+      case 'dogebark':
+
+
+      /*bot.joinVoiceChannel(400647401473310733, function(error, events) {
+        bot.getAudioContext(400647401473310733, function(error, events) {
+          fs.createReadStream('./muziek/bark.mp3').pipe(stream, {end: false});
+          stream.on('done', function() {
+              bot.leaveVoiceChannel(400647401473310733)
+          });
+        });
+      });*/
+
+      bot.joinVoiceChannel(400647401473310733, function(error, events) {
+        events.on('speaking', function(userID, SSRC, speakingBool) { //stream.once
+          logger.log("%s is %s", userID, (speakingBool ? "speaking" : "done speaking") );
+        });
+      });
+
+
+
+      break;
+
+
+      case 'reload':
+          bot.sendMessage({
+            to: channelID,
+          message: "> **/!\\ RELOAD WERKT EVEN NIET**",
+          });
+      break;
+
+
+
+
+      } // switch dicht doen
+   } // voor te controleren in enkel botchannel
+}); // laten staan voor bot.on
