@@ -145,17 +145,16 @@ bot.on('message', function (user, userID, channelID, message, evt) {
       case 'dogebark':
 
 
-      /*var file = "bark.mp3";
+      var file = "bark.mp3";
       var voiceChannelID = "400647401473310733";
-
-
       bot.joinVoiceChannel(voiceChannelID, function(error, events) {
         bot.getAudioContext(voiceChannelID, function(error, stream) {
           fs.createReadStream(file).pipe(stream, {end: false});
-
-          stream.on('done', function() {});
+          stream.on('done', function() {
+            bot.leaveVoiceChannel(voiceChannelID);
+          });
         });
-      });*/
+      });
 
       break;
 
