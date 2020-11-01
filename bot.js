@@ -1,4 +1,5 @@
 /* Made by Maxim D. & Alexie C.
+* use nodemon to get it up all time.
 * Todolist:
 * 1. Bot in call and barks *woof*, disconnects.
 * 2.
@@ -9,7 +10,7 @@
 var Discord = require('discord.io');
 //var Discord = require('discord.js');
 var logger = require('winston');
-var auth = require('./auth.json');
+//var auth = require('./auth.json');
 var fs = require('fs');
 
 
@@ -20,7 +21,7 @@ logger.add(new logger.transports.Console, {
 });
 logger.level = 'debug';
 var bot = new Discord.Client({
-   token: auth.token,
+   token: process.env.token,
    autorun: true
 });
 
@@ -45,7 +46,7 @@ var links = fs.readFileSync("./data-files/doge_videos.txt", "utf-8").split("\n")
 //Doge bark effect
 //var bark = fs.createReadStream('./muziek/bark.mp3');
 
-//simulate: "Alexie Chaerle is typing....."
+//simulate: "Doge is typing....."
 //bot.simulateTyping("400647401473310731");
 
 
@@ -136,7 +137,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
       case 'dogeinfo':
       bot.sendMessage({
         to: channelID,
-        message: "> **Dogebot 1.0**\n> *created by Maxim Derboven & Alexie Chaerle*",
+        message: "> **Dogebot 1.1**\n> *created by Maxim Derboven & Alexie Chaerle*",
       });
           break;
 
@@ -144,22 +145,17 @@ bot.on('message', function (user, userID, channelID, message, evt) {
       case 'dogebark':
 
 
-      /*bot.joinVoiceChannel(400647401473310733, function(error, events) {
-        bot.getAudioContext(400647401473310733, function(error, events) {
-          fs.createReadStream('./muziek/bark.mp3').pipe(stream, {end: false});
-          stream.on('done', function() {
-              bot.leaveVoiceChannel(400647401473310733)
-          });
+      /*var file = "bark.mp3";
+      var voiceChannelID = "400647401473310733";
+
+
+      bot.joinVoiceChannel(voiceChannelID, function(error, events) {
+        bot.getAudioContext(voiceChannelID, function(error, stream) {
+          fs.createReadStream(file).pipe(stream, {end: false});
+
+          stream.on('done', function() {});
         });
       });*/
-
-      bot.joinVoiceChannel(400647401473310733, function(error, events) {
-        events.on('speaking', function(userID, SSRC, speakingBool) { //stream.once
-          logger.log("%s is %s", userID, (speakingBool ? "speaking" : "done speaking") );
-        });
-      });
-
-
 
       break;
 

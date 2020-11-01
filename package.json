@@ -1,7 +1,7 @@
 {
-  "name": "Alexie-Chaerle",
+  "name": "Doge",
   "version": "1.0.0",
-  "description": "Alexie houdt van korfbal",
+  "description": "Doge-Simulator 2020",
   "main": "bot.js",
   "author": "Maxer",
   "dependencies": {

@@ -1,6 +1,8 @@
 # Private folder
 quotes.txt
 auth.json
+ffmpeg
+package-lock.json
 node_modules
 
 # Logs
